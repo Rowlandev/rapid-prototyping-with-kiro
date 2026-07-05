@@ -36,7 +36,7 @@ The agents follow a simplified **AI Development Lifecycle (AI-DLC)** pattern:
 
 ### Prerequisites
 
-- [Kiro IDE](https://kiro.dev) installed
+- [Kiro CLI](https://kiro.dev/cli/) installed
 - An AWS account (for deployment)
 
 ### 1. Clone this repo
@@ -70,19 +70,49 @@ without driving around or guessing at schedules.
 
 ### 3. Run the agents in order
 
-Open Kiro and run each agent sequentially. Each agent reads the output of the previous one.
+Open your terminal in the cloned repo and run each agent sequentially. Each agent reads the output of the previous one.
 
-```
-Agent 1: Product Owner       → produces user stories
-Agent 2: Domain Architect    → produces domain models
-Agent 3: Technical Architect → produces technical specs
-Agent 4: Full Stack Engineer → produces working code
-Agent 5: Deployment Engineer → deploys to AWS
+**Agent 1: Product Owner** — produces user stories
+
+```bash
+kiro-cli chat --agent product-owner
 ```
 
-Be ready for each agent to ask you questions before proceeding to the next stage. Each answer builds on the previous.
+> What to say: `Review intent.md and begin the clarification process.`
 
-The more specific you are in your responses, the better the result.
+**Agent 2: Domain Architect** — produces domain models
+
+```bash
+kiro-cli chat --agent domain-architect-agent
+```
+
+> What to say: `Review the user stories in ai-dlc/{feature-name}/product-owner/user-stories.md and begin domain modeling.`
+
+**Agent 3: Technical Architect** — produces technical specs
+
+```bash
+kiro-cli chat --agent technical-architect-agent
+```
+
+> What to say: `Review the domain stories and user stories, then begin technical architecture design.`
+
+**Agent 4: Full Stack Engineer** — produces working code
+
+```bash
+kiro-cli chat --agent full-stack-engineer-agent
+```
+
+> What to say: `Review all artifacts in ai-dlc/{feature-name}/ and begin implementation.`
+
+**Agent 5: Deployment Engineer** — deploys to AWS
+
+```bash
+kiro-cli chat --agent deployment-engineer-agent
+```
+
+> What to say: `Review the deployment handoff and deploy the application.`
+
+Each agent will ask you clarifying questions before proceeding. The more specific you are in your responses, the better the result.
 
 ### 4. Review the artifacts
 
@@ -118,7 +148,7 @@ By the time the Full Stack Engineer starts coding, every requirement is explicit
 
 ## Customizing the Agents
 
-The agent JSON files in `agents/` are fully editable. Common tweaks:
+The agent JSON files in `.kiro/agents/` are fully editable. Common tweaks:
 
 - **Change the model**: Update the `"model"` field (e.g., `claude-sonnet-4-5`)
 - **Adjust file paths**: The `toolsSettings` control where agents can read and write
@@ -131,12 +161,14 @@ The agent JSON files in `agents/` are fully editable. Common tweaks:
 .
 ├── README.md          ← you are here
 ├── intent.md          ← your idea goes here
-└── agents/
-    ├── 1-product-owner.json
-    ├── 2-domain-architect.json
-    ├── 3-technical-architect.json
-    ├── 4-full-stack-engineer.json
-    └── 5-deployment-engineer.json
+├── assets/            ← images
+└── .kiro/
+    └── agents/
+        ├── 1-product-owner.json
+        ├── 2-domain-architect.json
+        ├── 3-technical-architect.json
+        ├── 4-full-stack-engineer.json
+        └── 5-deployment-engineer.json
 ```
 
 ## Tips
